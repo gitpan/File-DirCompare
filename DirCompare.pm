@@ -6,11 +6,12 @@ use strict;
 use File::Basename;
 use File::Spec::Functions;
 use File::Compare ();
+use File::Glob qw(bsd_glob);
 use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 # ----------------------------------------------------------------------------
 # Private methods
@@ -22,10 +23,10 @@ sub _dir_compare
 
   # Glob $dir1 and $dir2
   my (%d1, %d2);
-  $d1{basename $_} = 1 foreach glob(catfile($dir1, ".*"));
-  $d1{basename $_} = 1 foreach glob(catfile($dir1, "*"));
-  $d2{basename $_} = 1 foreach glob(catfile($dir2, ".*"));
-  $d2{basename $_} = 1 foreach glob(catfile($dir2, "*"));
+  $d1{basename $_} = 1 foreach bsd_glob(catfile($dir1, ".*"));
+  $d1{basename $_} = 1 foreach bsd_glob(catfile($dir1, "*"));
+  $d2{basename $_} = 1 foreach bsd_glob(catfile($dir2, ".*"));
+  $d2{basename $_} = 1 foreach bsd_glob(catfile($dir2, "*"));
 
   # Prune dot dirs
   delete $d1{curdir()} if $d1{curdir()};
@@ -232,9 +233,12 @@ directory walking code I've adapted for this module), but a simpler
 reporting-only interface, something like the first example in the 
 SYNOPSIS above.
 
-=head1 AUTHOR
+=head1 AUTHOR AND CREDITS
 
 Gavin Carr <gavin@openfusion.com.au>
+
+Thanks to Robin Barker for a bug report and fix for glob problems
+with whitespace.
 
 =head1 COPYRIGHT AND LICENSE
 
