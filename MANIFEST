@@ -70,15 +70,15 @@ t/t08/new/ddd
 t/t08/new/eee
 t/t08/new/ggg/hhh/iii
 t/t08/results/ignore_unique
-t/t10/new/aaa\ bbb\ ccc
-t/t10/new/jjj\ kkk\ lll
-t/t10/new/ggg\ hhh\ iii
-t/t10/new/xxx\ yyy\ zzz/bog
-t/t10/new/xxx\ yyy\ zzz/bar
-t/t10/old/aaa\ bbb\ ccc
-t/t10/old/ddd\ eee\ fff
-t/t10/old/ggg\ hhh\ iii
-t/t10/old/xxx\ yyy\ zzz/foo
-t/t10/old/xxx\ yyy\ zzz/bar
-t/t10/old/uuu\ vvv\ www/foo
+t/t10/new/aaa bbb ccc
+t/t10/new/jjj kkk lll
+t/t10/new/ggg hhh iii
+t/t10/new/xxx yyy zzz/bog
+t/t10/new/xxx yyy zzz/bar
+t/t10/old/aaa bbb ccc
+t/t10/old/ddd eee fff
+t/t10/old/ggg hhh iii
+t/t10/old/xxx yyy zzz/foo
+t/t10/old/xxx yyy zzz/bar
+t/t10/old/uuu vvv www/foo
 t/t10/results/whitespace
