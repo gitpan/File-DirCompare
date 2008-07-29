@@ -12,9 +12,13 @@ t/10_whitespace.t
 t/t01/old/aaa
 t/t01/old/ccc
 t/t01/old/ddd
+t/t01/old/eee
+t/t01/old/fff
 t/t01/new/bbb
 t/t01/new/ccc
 t/t01/new/ddd
+t/t01/new/eee
+t/t01/new/fff
 t/t01/results/basic
 t/t02/old/aaa
 t/t02/old/ccc

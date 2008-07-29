@@ -11,7 +11,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '0.3';
+$VERSION = '0.4';
 
 # ----------------------------------------------------------------------------
 # Private methods
@@ -53,8 +53,18 @@ sub _dir_compare
       if (-d $f1 && -d $f2) {
         $self->_dir_compare($f1, $f2, $sub, $opts);
       }
-      # One directory
+      # One directory (i.e. different)
       elsif (-d $f1 || -d $f2) {
+        $sub->($f1, $f2);
+      }
+      # Both symlinks
+      elsif (-l $f1 && -l $f2) {
+        my $t1 = readlink $f1 or croak "Cannot read symlink $f1: $!";
+        my $t2 = readlink $f2 or croak "Cannot read symlink $f2: $!";
+        $sub->($f1, $f2) if $t1 ne $t2;
+      }
+      # One symlink (i.e. different)
+      elsif (-l $f1 || -l $f2) {
         $sub->($f1, $f2);
       }
       # Both files - check if different
@@ -128,7 +138,7 @@ callbacks.
 
   # Version-control like Deleted/Added/Modified listing
   my (@listing, @modified);     # use closure to collect results
-  File::DirCompare->compare('old_tree', 'new_tree'), sub {
+  File::DirCompare->compare('old_tree', 'new_tree', sub {
     my ($a, $b) = @_;
     if (! $b) {
       push @listing, "D   $a";
