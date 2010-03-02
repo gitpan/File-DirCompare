@@ -11,7 +11,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '0.5';
+$VERSION = '0.5.1';
 
 # ----------------------------------------------------------------------------
 # Private methods
