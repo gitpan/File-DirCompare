@@ -11,7 +11,7 @@ use Carp;
 
 use vars qw($VERSION);
 
-$VERSION = '0.6';
+$VERSION = '0.7';
 
 # ----------------------------------------------------------------------------
 # Private methods
@@ -34,6 +34,10 @@ sub _dir_compare
   delete $d2{curdir()} if $d2{curdir()};
   delete $d2{updir()}  if $d2{updir()};
 
+  # Setup cmp and matches subs
+  my $cmp = $opts->{cmp} && ref $opts->{cmp} eq 'CODE' ? $opts->{cmp} : \&File::Compare::compare;
+  my $matches = $opts->{matches} if $opts->{matches} && ref $opts->{matches} eq 'CODE';
+
   # Iterate over sorted and uniquified file list
   my %u;
   for my $f (map { $u{$_}++ == 0 ? $_ : () } sort(keys(%d1), keys(%d2))) {
@@ -47,7 +51,7 @@ sub _dir_compare
     elsif (! $d1{$f}) {
       $sub->(undef, $f2) unless $opts->{ignore_unique};
     }
-    # In both
+    # Item exists in both directories
     else {
       # Both symlinks
       if (-l $f1 && -l $f2) {
@@ -72,13 +76,11 @@ sub _dir_compare
         if ($opts->{ignore_cmp}) {
           $sub->($f1, $f2);
         }
-        elsif ($opts->{'cmp'} && ref $opts->{'cmp'} eq 'CODE') {
-          if ($opts->{'cmp'}->($f1, $f2) != 0) {
-            $sub->($f1, $f2);
-          }
-        }
-        elsif (File::Compare::compare($f1, $f2) != 0) {
+        elsif ($cmp->($f1, $f2) != 0) {
           $sub->($f1, $f2);
+        }
+        elsif ($matches) {
+          $matches->($f1, $f2);
         }
       }
     }
@@ -197,8 +199,10 @@ The following optional arguments are supported, passed in using a
 hash reference after the three required arguments to compare() e.g.
 
   File::DirCompare->compare($dir1, $dir2, $sub, {
-    cmp => $cmp_sub,
-    ignore_unique => 1,
+    cmp             => $cmp_sub,
+    ignore_cmp      => 1,
+    ignore_unique   => 1,
+    matches         => $matches_sub,
   });
 
 =over 4
@@ -234,6 +238,15 @@ directories, set the 'ignore_unique' flag i.e.
   File::DirCompare->compare($dir1, $dir2, $sub, 
     { ignore_unique => 1 });
 
+=item matches
+
+Subroutine to be called for file pairs that I<match>, with the
+following signature:
+
+  $sub->($file1, $file2)
+
+These pairs are ordinarily ignored (unless C<ignore_cmp> is set).
+
 =back
 
 =head1 SEE ALSO
@@ -252,7 +265,7 @@ with whitespace.
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright 2006-2007 by Gavin Carr.
+Copyright 2006-2012 by Gavin Carr E<lt>gavin@openfusion.com.auE<gt>.
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 

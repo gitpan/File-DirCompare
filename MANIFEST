@@ -10,6 +10,7 @@ t/06_cmp.t
 t/07_ignore_cmp.t
 t/08_ignore_unique.t
 t/10_whitespace.t
+t/12_matches.t
 t/t01/new/bbb
 t/t01/new/ccc
 t/t01/new/ddd
@@ -91,4 +92,14 @@ t/t08/results/ignore_unique
 't/t10/old/xxx yyy zzz/bar'
 't/t10/old/xxx yyy zzz/foo'
 t/t10/results/whitespace
+t/t12/new/bbb
+t/t12/new/ccc
+t/t12/new/ddd
+t/t12/new/eee
+t/t12/new/ggg/hhh/iii
+t/t12/old/aaa
+t/t12/old/ccc
+t/t12/old/ddd
+t/t12/old/fff
+t/t12/results/matches
 TODO
